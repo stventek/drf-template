@@ -1,0 +1,16 @@
+### Django ###
+*.pyc
+*.log
+*.sqlite3
+*.swp
+
+### Python ###
+__pycache__/
+*.egg-info/
+.idea/
+.tox/
+
+### Other ###
+.DS_Store
+.env
+venv
