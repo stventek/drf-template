@@ -15,3 +15,8 @@ class BlogPost(BaseModel):
 
     def __str__(self):
         return self.title
+    
+    class Meta:
+        permissions = [
+            ("custom_blogpost", "can view custom"),
+        ]
