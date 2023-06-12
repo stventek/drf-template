@@ -37,11 +37,13 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'apps.example_app',
-    'rest_framework'
+    'rest_framework',
+    'knox',
+    'apps.knox_auth'
 ]
 
-
 REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': ('knox.auth.TokenAuthentication',),
     'DEFAULT_PERMISSION_CLASSES': [
         'apps.core.permissions.CustomDjangoModelPermissions',
     ],

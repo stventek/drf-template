@@ -22,7 +22,8 @@ from django.urls import include, path
 urlpatterns = [
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     path('admin/', admin.site.urls),
-    path('', include('apps.example_app.urls'))
+    path('example_app/', include('apps.example_app.urls')),
+    path('knox_auth/', include('apps.knox_auth.urls')),
 ]
 
 
