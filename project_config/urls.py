@@ -14,10 +14,11 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django import urls
 from django.contrib import admin
-from django.urls import path
 from django.urls import include, path
+from django.conf import settings
+
+
 
 urlpatterns = [
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
@@ -25,5 +26,9 @@ urlpatterns = [
     path('example_app/', include('apps.example_app.urls')),
     path('knox_auth/', include('apps.knox_auth.urls')),
 ]
+ENV = getattr(settings, 'ENV')
+
+if ENV == 'LOCAL' or ENV  == 'QA':
+    urlpatterns.append(path('', include('project_config.urls_swagger')))
 
 

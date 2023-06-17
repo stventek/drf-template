@@ -16,6 +16,20 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+
+
+ENV = os.environ.get('ENV')
+
+if ENV == 'QA':
+    DEBUG = True
+    from project_config.qa import *
+elif ENV == 'LOCAL':
+    DEBUG = True
+    from project_config.local import *
+elif ENV == 'PROD':
+    DEBUG = False
+    from project_config.prod import *
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -40,10 +54,24 @@ INSTALLED_APPS = [
     'apps.example_app',
     'rest_framework',
     'knox',
-    'apps.knox_auth'
+    'apps.knox_auth',
+    'drf_spectacular',
 ]
 
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'Your Project API',
+    'DESCRIPTION': 'Your project description',
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': False,
+    "SWAGGER_UI_SETTINGS": {
+        "persistAuthorization": True,
+    },
+}
+
+AUTHENTICATION_BACKENDS =["apps.core.custom_authentication_backend.EmailBackend"]
+
 REST_FRAMEWORK = {
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
     'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
     'DEFAULT_AUTHENTICATION_CLASSES': ('knox.auth.TokenAuthentication', 'rest_framework.authentication.SessionAuthentication'),
     'DEFAULT_PERMISSION_CLASSES': [
@@ -137,14 +165,5 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-ENV = os.environ.get('ENV')
-
-if ENV == 'QA':
-    DEBUG = True
-    from project_config.qa import *
-elif ENV == 'LOCAL':
-    DEBUG = True
-    from project_config.local import *
-elif ENV == 'PROD':
-    DEBUG = False
-    from project_config.prod import *
+# import custom scheme extension
+from apps.knox_auth.scheme import KnoxTokenScheme
