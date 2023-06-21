@@ -19,13 +19,14 @@ from django.urls import include, path
 from django.conf import settings
 
 
-
 urlpatterns = [
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     path('admin/', admin.site.urls),
     path('example_app/', include('apps.example_app.urls')),
     path('knox_auth/', include('apps.knox_auth.urls')),
+    path('auth/', include('drf_social_oauth2.urls', namespace='drf')),
 ]
+
 ENV = getattr(settings, 'ENV')
 
 if ENV == 'LOCAL' or ENV  == 'QA':

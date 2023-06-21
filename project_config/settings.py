@@ -56,6 +56,9 @@ INSTALLED_APPS = [
     'knox',
     'apps.knox_auth',
     'drf_spectacular',
+    'oauth2_provider',
+    'social_django',
+    'drf_social_oauth2',
 ]
 
 SPECTACULAR_SETTINGS = {
@@ -68,12 +71,16 @@ SPECTACULAR_SETTINGS = {
     },
 }
 
-AUTHENTICATION_BACKENDS =["apps.core.custom_authentication_backend.EmailBackend"]
+AUTHENTICATION_BACKENDS =["django.contrib.auth.backends.ModelBackend",   'drf_social_oauth2.backends.DjangoOAuth2',]
 
 REST_FRAMEWORK = {
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
     'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
-    'DEFAULT_AUTHENTICATION_CLASSES': ('knox.auth.TokenAuthentication', 'rest_framework.authentication.SessionAuthentication'),
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'knox.auth.TokenAuthentication', 
+        'rest_framework.authentication.SessionAuthentication',
+        'oauth2_provider.contrib.rest_framework.OAuth2Authentication',  # django-oauth-toolkit >= 1.0.0
+        'drf_social_oauth2.authentication.SocialAuthentication',),
     'DEFAULT_PERMISSION_CLASSES': [
         'apps.core.permissions.CustomDjangoModelPermissions',
     ],
@@ -104,6 +111,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'social_django.context_processors.backends',
+                'social_django.context_processors.login_redirect',
             ],
         },
     },
